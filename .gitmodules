@@ -1,3 +1,6 @@
 [submodule "conduit-frontend"]
 	path = conduit-frontend
 	url = https://github.com/mihaiandreineacsu/conduit-frontend.git
+[submodule "conduit-backend"]
+	path = conduit-backend
+	url = https://github.com/mihaiandreineacsu/conduit-backend.git
