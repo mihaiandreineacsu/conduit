@@ -17,4 +17,9 @@ services:
     ports:
       - 8000:8000
     restart: always
+    volumes:
+      - db:/app/db
+
+volumes:
+  db:
 
