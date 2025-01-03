@@ -1,0 +1,20 @@
+services:
+
+  conduit-frontend:
+    build:
+      context: ./conduit-frontend
+      dockerfile: ../frontend.Dockerfile
+    restart: always
+    ports:
+      - 4000:80
+    depends_on:
+      - conduit-backend
+
+  conduit-backend:
+    build:
+      context: ./conduit-backend
+      dockerfile: ../backend.Dockerfile
+    ports:
+      - 8000:8000
+    restart: always
+
