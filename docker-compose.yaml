@@ -4,21 +4,38 @@ services:
     build:
       context: ./conduit-frontend
       dockerfile: ../frontend.Dockerfile
-    restart: always
-    ports:
-      - 4000:80
+      args:
+        API_URL: ${API_URL}
     depends_on:
       - conduit-backend
+    restart: unless-stopped
+    ports:
+      - 8282:80
+    volumes:
+      - ./logs/frontend:/var/log/container_logs
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
   conduit-backend:
     build:
       context: ./conduit-backend
       dockerfile: ../backend.Dockerfile
+    restart: unless-stopped
     ports:
-      - 8000:8000
-    restart: always
+      - 8888:8000
     volumes:
       - db:/app/db
+      - ./logs/backend:/var/log/container_logs
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    env_file:
+      - .env
 
 volumes:
   db:
