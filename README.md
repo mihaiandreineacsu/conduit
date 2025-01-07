@@ -57,7 +57,7 @@ This project aims to containerize the conduit frontend and backend projects usin
 If everything worked alright you can access conduit frontend and backend in your browser:
 
 - conduit-fronted is set by default to <http://localhost:8282>
-- conduit-backend is set by default to <http://localhost:8888>
+- conduit-backend is set by default to <http://localhost:8889>
 
 ---
 
@@ -138,7 +138,7 @@ This services sets following configurations:
     1. Exposes container port `8000`.
     1. The `CMD` runs the django `makemigrations`, `migrate` and `runserver 0.0.0.0:8000` then collects the application logs to `/var/log/container_logs/container.log 2>&1`.
 
-- Binds the host port `8888` to container port `8000`.
+- Binds the host port `8889` to container port `8000`.
 - Sets `restart` to `unless-stopped`.
 - Binds the host `./logs/backend` location to container `/var/log/container_logs` location, to persist application logs.
 - Binds the **db** volume to conduit backend database location.
