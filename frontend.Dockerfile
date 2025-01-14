@@ -4,12 +4,12 @@ WORKDIR /app
 COPY . .
 
 # Declare the build argument with a default value
-ARG API_URL="http://localhost:8000"
+ARG API_URL="http://localhost:8889"
+ENV BASE_API_URL=${API_URL}
 
 
 # Replace the placeholder in environment.prod.ts, install dependencies and build production configuration
-RUN sed -i "s|{{API_URL}}|${API_URL}|g" src/environments/environment.prod.ts && \
-    npm install && \
+RUN npm install && \
     npm run build
 
 # Production stage
