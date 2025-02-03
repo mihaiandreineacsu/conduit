@@ -1,11 +1,13 @@
 # Stage 1: Build the Angular app
 FROM node:20 AS build
 WORKDIR /app
-COPY . .
+COPY ./conduit-frontend/ .
 
 # Declare the build argument with a default value
-ARG API_URL="http://localhost:8889"
+ARG API_PORT="8000"
+ARG API_URL="localhost"
 ENV BASE_API_URL=${API_URL}
+ENV BASE_API_PORT=${API_PORT}
 
 
 # Replace the placeholder in environment.prod.ts, install dependencies and build production configuration

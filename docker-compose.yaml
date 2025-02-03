@@ -2,15 +2,16 @@ services:
 
   conduit-frontend:
     build:
-      context: ./conduit-frontend
-      dockerfile: ../frontend.Dockerfile
+      context: .
+      dockerfile: ./frontend.Dockerfile
       args:
-        API_URL: ${API_URL}
+        API_URL: ${BACKEND_URL:-localhost}
+        API_PORT: ${BACKEND_PORT:-8000}
     depends_on:
       - conduit-backend
     restart: unless-stopped
     ports:
-      - 8282:80
+      - "${FRONTEND_PORT:-8080}:80"
     volumes:
       - ./logs/frontend:/var/log/container_logs
     logging:
@@ -23,11 +24,11 @@ services:
 
   conduit-backend:
     build:
-      context: ./conduit-backend
-      dockerfile: ../backend.Dockerfile
+      context: .
+      dockerfile: ./backend.Dockerfile
     restart: unless-stopped
     ports:
-      - 8889:8000
+      - "${BACKEND_PORT:-8000}:8000"
     volumes:
       - db:/app/db
       - ./logs/backend:/var/log/container_logs
@@ -38,6 +39,7 @@ services:
         max-file: "3"
     env_file:
       - .env
+    entrypoint: ["/app/backend-entrypoint.sh"]
 
 volumes:
   db:
