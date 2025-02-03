@@ -2,9 +2,11 @@
 FROM python:3.6-slim
 
 WORKDIR /app
-COPY . .
+COPY ./conduit-backend/ .
+COPY ./backend-entrypoint.sh /app/backend-entrypoint.sh
+RUN chmod +x /app/backend-entrypoint.sh
 
 RUN pip install -r requirements.txt
 
 EXPOSE 8000
-CMD ["sh", "-c", "(python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000) 2>&1 | tee -a /var/log/container_logs/container.log"]
+ENTRYPOINT [ "./backend.entrypoint.sh" ]
