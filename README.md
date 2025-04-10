@@ -9,8 +9,9 @@ This project aims to containerize the conduit frontend and backend projects usin
 - [Dependencies](#dependencies)
 - [Quick start](#quick-start)
 - [Structure](#structure)
-- [Environments](#environments)
 - [Usage](#usage)
+- [Environments](#environments)
+- [Deployment](#deployment)
 
 ---
 
@@ -96,3 +97,14 @@ It defines two services and a volume:
 | DJANGO_DEBUG | bool | Never deploy a site into production with DEBUG turned on. |
 
 ---
+
+### Deployment
+
+The deployment is defined in [.github/workflows/deployment.yaml](./.github/workflows/deployment.yaml).
+and triggers on `main` branch push.
+
+Required Github Repository Secrets for deployment flow:
+
+- **REMOTE_USER** : The username to connect per ssh.
+- **REMOTE_HOST** : The server address to connect per ssh.
+- **REMOTE_SSH_KEY** : The private ssh key to connect per ssh.
