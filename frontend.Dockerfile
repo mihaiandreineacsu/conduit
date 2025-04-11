@@ -15,7 +15,7 @@ RUN npm install && \
     npm run build
 
 # Production stage
-FROM bitnami/nginx:alpine AS prod
+FROM bitnami/nginx:1.27.4 AS prod
 COPY --from=build /app/dist/angular-conduit /usr/share/nginx/html
 EXPOSE 80
 CMD ["sh", "-c", "nginx -g 'daemon off;' 2>&1 | tee -a /var/log/container_logs/container.log"]
