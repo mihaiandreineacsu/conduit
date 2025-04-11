@@ -1,5 +1,5 @@
 # Stage 1: Build the Angular app
-FROM bitnami/node:21 AS build
+FROM bitnami/node:20 AS build
 WORKDIR /app
 COPY ./conduit-frontend/ .
 
