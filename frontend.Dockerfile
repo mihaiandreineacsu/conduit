@@ -16,7 +16,8 @@ RUN npm install && \
 
 # Production stage
 FROM bitnami/nginx:1.27.4 AS prod
-COPY --from=build /app/dist/angular-conduit /usr/share/nginx/html
+COPY --from=build /app/dist/angular-conduit /opt/bitnami/nginx/html
+COPY ./nginx.config /opt/bitnami/nginx/conf/server_blocks/nginx.config
 USER root
 COPY ./frontend-entrypoint.sh /app/frontend-entrypoint.sh
 RUN chmod +x /app/frontend-entrypoint.sh
