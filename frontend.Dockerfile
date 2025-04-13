@@ -21,5 +21,5 @@ USER root
 COPY ./frontend-entrypoint.sh /app/frontend-entrypoint.sh
 RUN chmod +x /app/frontend-entrypoint.sh
 USER 1001
-EXPOSE 80
+EXPOSE 8080
 ENTRYPOINT [ "./frontend-entrypoint.sh" ]
