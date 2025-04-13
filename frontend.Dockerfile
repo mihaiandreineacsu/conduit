@@ -17,7 +17,9 @@ RUN npm install && \
 # Production stage
 FROM bitnami/nginx:1.27.4 AS prod
 COPY --from=build /app/dist/angular-conduit /usr/share/nginx/html
-COPY ./frontend-entrypoint.sh /app/frontend-entrypoint.sh
+USER root
+COPY ./conduit-frontend/entrypoint.sh /app/frontend-entrypoint.sh
 RUN chmod +x /app/frontend-entrypoint.sh
+USER 1001
 EXPOSE 80
 ENTRYPOINT [ "./frontend-entrypoint.sh" ]
