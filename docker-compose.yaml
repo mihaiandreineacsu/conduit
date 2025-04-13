@@ -11,7 +11,7 @@ services:
       - conduit-backend
     restart: unless-stopped
     ports:
-      - "${FRONTEND_PORT:-8080}:80"
+      - "${FRONTEND_PORT:-8080}:8080"
     volumes:
       - ./logs/frontend:/var/log/container_logs
     logging:
