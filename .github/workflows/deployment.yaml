@@ -20,6 +20,8 @@ jobs:
         script: |
           set -e
           cd ~/conduit
+          mkdir -p ./logs/frontend
+          sudo chown -R 1001:1001 ./logs/frontend
           docker-compose down
           git pull --recurse-submodules
           docker-compose up -d --build
