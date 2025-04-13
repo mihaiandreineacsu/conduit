@@ -17,5 +17,7 @@ RUN npm install && \
 # Production stage
 FROM bitnami/nginx:1.27.4 AS prod
 COPY --from=build /app/dist/angular-conduit /usr/share/nginx/html
+COPY ./frontend-entrypoint.sh /app/frontend-entrypoint.sh
+RUN chmod +x /app/frontend-entrypoint.sh
 EXPOSE 80
-CMD ["sh", "-c", "nginx -g 'daemon off;' 2>&1 | tee -a /var/log/container_logs/container.log"]
+ENTRYPOINT [ "./frontend-entrypoint.sh" ]

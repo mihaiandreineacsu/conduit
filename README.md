@@ -69,6 +69,7 @@ If everything worked alright you can access conduit frontend and backend in your
 - [backend-entrypoint.sh](./backend-entrypoint.sh): The entrypoint file for conduit-backend container.
 - [backend.Dockerfile](./backend.Dockerfile): Docker file to build docker container for the conduit backend.
 - [docker-compose.yaml](./docker-compose.yaml): Docker compose file to build and run conduit frontend and backend containers.
+- [frontend-entrypoint.sh](./frontend-entrypoint.sh): The entrypoint file for conduit-frontend container.
 - [frontend.Dockerfile](./frontend.Dockerfile): Docker file to build docker container for the conduit frontend.
 - [Git Submodule.md](./Git%20Submodule.md): Guide how to work with Git submodules.
 - [template.env](./template.env): Contains default values for environments.
