@@ -1,0 +1,29 @@
+services:
+
+  conduit-frontend:
+    build:
+      context: .
+      dockerfile: ./frontend.dev.Dockerfile
+      args:
+        API_URL: ${BACKEND_URL:-localhost}
+        API_PORT: ${BACKEND_PORT:-8000}
+    depends_on:
+      - conduit-backend
+    restart: unless-stopped
+    ports:
+      - "${FRONTEND_PORT:-8080}:8080"
+    volumes:
+      - ./conduit-frontend:/app
+      - /app/node_modules  # fix so that it does not get copied by the volume above
+
+  conduit-backend:
+    build:
+      context: .
+      dockerfile: ./backend.Dockerfile
+    restart: unless-stopped
+    ports:
+      - "${BACKEND_PORT:-8000}:8000"
+    volumes:
+      - ./conduit-backend:/app
+    env_file:
+      - .env
