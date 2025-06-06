@@ -50,7 +50,7 @@ This project aims to containerize the conduit frontend and backend projects usin
 1. **Start the project using `docker-compose`:**
 
     ```bash
-    docker-compose up --build
+    docker-compose -f docker-compose.dev.yaml up --build
     ```
 
     > [!NOTE] See [Usage](#usage) for more details about the build and start process.
@@ -68,22 +68,23 @@ If everything worked alright you can access conduit frontend and backend in your
 - [conduit-frontend](./conduit-frontend): Git submodule to conduit frontend source code.
 - [backend-entrypoint.sh](./backend-entrypoint.sh): The entrypoint file for conduit-backend container.
 - [backend.Dockerfile](./backend.Dockerfile): Docker file to build docker container for the conduit backend.
-- [docker-compose.yaml](./docker-compose.yaml): Docker compose file to build and run conduit frontend and backend containers.
+- [docker-compose.dev.yaml](./docker-compose.dev.yaml): Docker compose file to build and run conduit locally.
+- [docker-compose.yaml](./docker-compose.yaml): Docker compose file to run latest conduit build.
 - [frontend-entrypoint.sh](./frontend-entrypoint.sh): The entrypoint file for conduit-frontend container.
-- [frontend.Dockerfile](./frontend.Dockerfile): Docker file to build docker container for the conduit frontend.
+- [frontend.Dockerfile](./frontend.Dockerfile): Docker file to build docker container for the conduit frontend in production. Servers the frontend via nginx.
+- [frontend.dev.Dockerfile](./frontend.dev.Dockerfile): Docker file to build docker container for the conduit frontend in development. Servers the frontend via angular development server.
 - [Git Submodule.md](./Git%20Submodule.md): Guide how to work with Git submodules.
 - [nginx.config](./nginx.config): Single Application nginx configuration.
 - [template.env](./template.env): Contains default values for environments.
 
 ## Usage
 
-The entire build and run process is managed by the [docker-compose.yaml](./docker-compose.yaml) file.
+The local development build and run process is managed by the [docker-compose.dev.yaml](./docker-compose.dev.yaml) file.
 
 It defines two services and a volume:
 
 - **conduit-frontend** service: Builds and starts the conduit frontend application.
 - **conduit-backend** service: Builds and starts the conduit backend application.
-- **db** volume: Bound to the conduit backend application's database.
 
 ### Environments
 
@@ -96,17 +97,43 @@ It defines two services and a volume:
 | BACKEND_URL | URL | The URL to backend api, used by frontend in the [API Interceptor](./conduit-frontend/src/app/core/interceptors/api.interceptor.ts). |
 | BACKEND_PORT | int | The PORT to backend api, used by frontend in the [API Interceptor](./conduit-frontend/src/app/core/interceptors/api.interceptor.ts). |
 | DJANGO_SECRET_KEY | string |  This is used to provide cryptographic signing. |
-| DJANGO_DEBUG | bool | Never deploy a site into production with DEBUG turned on. |
+| DJANGO_DEBUG | bool | Never deploy a site into production with **DEBUG** turned on. |
+| DJANGO_SUPERUSER_EMAIL | string | Email of Django Admin to be created. |
+| DJANGO_SUPERUSER_USERNAME | string | Username of Django Admin to be created. |
+| DJANGO_SUPERUSER_PASSWORD | string | Password of Django Admin to be created. |
 
 ---
 
 ### Deployment
 
 The deployment is defined in [.github/workflows/deployment.yaml](./.github/workflows/deployment.yaml).
-and triggers on `main` branch push.
 
-Required Github Repository Secrets for deployment flow:
+Following steps are running when the workflow is triggered:
+
+1. Logs into Github Container Registries.
+1. Builds and pushes Conduit Frontend to Github Container Registries.
+1. Builds and pushes Conduit Backend to Github Container Registries.
+1. Creates `.env` file.
+1. Securely copies [docker-compose.yaml](./docker-compose.yaml) and created `.env` file to Cloud VM.
+1. Logs into Cloud VM and releases Conduit.
+
+### Required Github Repository Secrets for deployment flow
+
+Required by **Login to Github Container Registries** step:
+
+- **GITHUB_TOKEN** : Github Personal Access Token to login into Github Container Registries.
+
+Required by **Build and Push Conduit Frontend** step:
+
+- **BACKEND_URL**: The URL of conduit-backend api.
+- **BACKEND_PORT**: The PORT of conduit-backend api.
+
+Required by **Create .env File** step:
+
+- All environments variables defined in [template.env](./template.env) file.
+
+Required by **Login to Cloud VM and release Conduit** step:
 
 - **REMOTE_USER** : The username to connect per ssh.
 - **REMOTE_HOST** : The server address to connect per ssh.
-- **REMOTE_SSH_KEY** : The private ssh key to connect per ssh.
+- **REMOTE_SSH_KEY** : The private ssh key as string to connect per ssh.
