@@ -3,7 +3,7 @@ version: '3.8'
 
 services:
   conduit-frontend:
-    image: ghcr.io/mihaiandreineacsu/conduit-frontend:latest
+    image: ghcr.io/mihaiandreineacsu/conduit-frontend:${FRONTEND_TAG:-latest}
     depends_on:
       - conduit-backend
     restart: on-failure
@@ -11,7 +11,7 @@ services:
       - "8282:8080"
 
   conduit-backend:
-    image: ghcr.io/mihaiandreineacsu/conduit-backend:latest
+    image: ghcr.io/mihaiandreineacsu/conduit-backend:${BACKEND_TAG:-latest}
     restart: on-failure
     ports:
       - "8000:8000"
