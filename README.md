@@ -6,16 +6,17 @@ This project containerizes the Conduit frontend and backend using Docker Compose
 
 ## Table of contents
 
-- [Dependencies](#dependencies)
+- [Prerequisites](#prerequisites)
 - [Quick start](#quick-start)
 - [Structure](#structure)
 - [Usage](#usage)
 - [Environments](#environments)
 - [Deployment](#deployment)
+- [Required Github Repository Secrets](#required-github-repository-secrets)
 
 ---
 
-## Dependencies
+## Prerequisites
 
 - **Git**
 - **Docker**
@@ -27,34 +28,34 @@ This project containerizes the Conduit frontend and backend using Docker Compose
 
 1. Download and navigate to Repository:
 
-    > [!NOTE]
-    > Use the `--recursive` argument to automatically update the `conduit-frontend` and `conduit-backend` submodules. For more on Git Submodules, see this [guide](./Git%20Submodule.md).
+> [!NOTE]
+> Use the `--recursive` argument to automatically update the `conduit-frontend` and `conduit-backend` submodules. For more on Git Submodules, see this [guide](./Git%20Submodule.md).
 
-    ```bash
-    git clone --recursive https://github.com/mihaiandreineacsu/conduit.git && cd conduit
-    ```
+```bash
+git clone --recursive https://github.com/mihaiandreineacsu/conduit.git && cd conduit
+```
 
-1. **Create dot env file**
+2. **Create dot env file**
 
-    - Using CLI:
+- Using CLI:
 
-        ```bash
-        cat template.env > .env
-        ```
+```bash
+cat template.env > .env
+```
 
-    - Or manually create a `.env` file in the project root and copy the contents of [template.env](./template.env) into it.
+- Or manually create a `.env` file in the project root and copy the contents of [template.env](./template.env) into it.
 
-    > [!NOTE]
-    > The [template.env](./template.env) contains default values for local setup. Adjust these values as needed. See [Environments](#environments) for more details.
+> [!NOTE]
+> The [template.env](./template.env) contains default values for local setup. Adjust these values as needed. See [Environments](#environments) for more details.
 
-1. **Start the project with Docker Compose:**
+3. **Start the project with Docker Compose:**
 
-    ```bash
-    docker-compose -f docker-compose.dev.yaml up --build
-    ```
+```bash
+docker-compose -f docker-compose.dev.yaml up --build
+```
 
-    > [!NOTE]
-    > See [Usage](#usage) for more details about the build and start process.
+> [!NOTE]
+> See [Usage](#usage) for more details about the build and start process.
 
 Access the Conduit frontend and backend in your browser:
 
@@ -110,7 +111,7 @@ The local development process is managed by [docker-compose.dev.yaml](./docker-c
 
 Deployment is defined in [.github/workflows/deployment.yaml](./.github/workflows/deployment.yaml).
 
-It triggers on tags following the pattern `'v*.*.*'`.
+It triggers on all tags.
 
 Steps executed when triggered:
 
@@ -125,7 +126,7 @@ Steps executed when triggered:
 
 For **Login to GitHub Container Registries**:
 
-- **GITHUB_TOKEN** : Personal Access Token for GitHub Container Registries.
+- **GHCR_TOKEN** : Personal Access Token for GitHub Container Registries.
 
 For **Build and Push Conduit Frontend**:
 
@@ -138,6 +139,7 @@ For **Create .env File**:
 
 For **Login to Cloud VM and Release Conduit**:
 
+- **GHCR_TOKEN** : Personal Access Token for GitHub Container Registries.
 - **REMOTE_USER**: SSH username.
 - **REMOTE_HOST**: SSH server address.
 - **REMOTE_SSH_KEY**: SSH private key.
