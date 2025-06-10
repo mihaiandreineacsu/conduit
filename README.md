@@ -107,7 +107,7 @@ The local development process is managed by [docker-compose.dev.yaml](./docker-c
 
 ---
 
-### Deployment
+## Deployment
 
 Deployment is defined in [.github/workflows/deployment.yaml](./.github/workflows/deployment.yaml).
 
@@ -122,7 +122,9 @@ Steps executed when triggered:
 1. Securely copy [docker-compose.yaml](./docker-compose.yaml) and the `.env` file to the Cloud VM.
 1. Log into the Cloud VM and release Conduit.
 
-### Required Github Repository Secrets
+---
+
+## Required Github Repository Secrets
 
 For **Login to GitHub Container Registries**:
 
@@ -143,3 +145,5 @@ For **Login to Cloud VM and Release Conduit**:
 - **REMOTE_USER**: SSH username.
 - **REMOTE_HOST**: SSH server address.
 - **REMOTE_SSH_KEY**: SSH private key.
+
+---
