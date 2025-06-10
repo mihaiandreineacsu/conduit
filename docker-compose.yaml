@@ -8,13 +8,13 @@ services:
       - conduit-backend
     restart: on-failure
     ports:
-      - "8282:8080"
+      - "${FRONTEND_PORT:-8282}:8080"
 
   conduit-backend:
     image: ghcr.io/mihaiandreineacsu/conduit-backend:${BACKEND_TAG:-latest}
     restart: on-failure
     ports:
-      - "8000:8000"
+      - "${BACKEND_PORT:-8000}:8000"
     env_file:
       - .env
     volumes:
