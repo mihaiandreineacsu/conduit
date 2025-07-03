@@ -10,7 +10,7 @@ This project containerizes the Conduit frontend and backend using Docker Compose
 - [Quick start](#quick-start)
 - [Structure](#structure)
 - [Usage](#usage)
-- [Environments](#environments)
+- [Environment Variables](#environment-variables)
 - [Deployment](#deployment)
 - [Required Github Repository Secrets](#required-github-repository-secrets)
 
@@ -26,33 +26,30 @@ This project containerizes the Conduit frontend and backend using Docker Compose
 
 ## Quick start
 
+> [!NOTE]
+> Use the `--recursive` argument to automatically update the [conduit-frontend](./conduit-frontend/) and [conduit-backend](./conduit-backend/) submodules. For more on Git Submodules, see this [guide](./Git%20Submodule.md).
+
 1. Download and navigate to Repository:
 
-> [!NOTE]
-> Use the `--recursive` argument to automatically update the `conduit-frontend` and `conduit-backend` submodules. For more on Git Submodules, see this [guide](./Git%20Submodule.md).
+    ```bash
+    git clone --recursive https://github.com/mihaiandreineacsu/conduit.git && cd conduit
+    ```
 
-```bash
-git clone --recursive https://github.com/mihaiandreineacsu/conduit.git && cd conduit
-```
+1. **Create dot env file**
 
-2. **Create dot env file**
+    - Using CLI:
 
-- Using CLI:
+    ```bash
+    cat template.env > .env
+    ```
 
-```bash
-cat template.env > .env
-```
+    - Or manually create a `.env` file in the project root and copy the contents of [template.env](./template.env) into it.
 
-- Or manually create a `.env` file in the project root and copy the contents of [template.env](./template.env) into it.
+1. **Start the project with Docker Compose:**
 
-> [!NOTE]
-> The [template.env](./template.env) contains default values for local setup. Adjust these values as needed. See [Environments](#environments) for more details.
-
-3. **Start the project with Docker Compose:**
-
-```bash
-docker-compose -f docker-compose.dev.yaml up --build
-```
+    ```bash
+    docker-compose -f docker-compose.dev.yaml up --build
+    ```
 
 > [!NOTE]
 > See [Usage](#usage) for more details about the build and start process.
@@ -88,13 +85,14 @@ The local development process is managed by [docker-compose.dev.yaml](./docker-c
 - **conduit-frontend** Builds and starts the frontend application.
 - **conduit-backend** Builds and starts the backend application.
 
-### Environments
+### Environment Variables
 
 > [!NOTE]
+> The [template.env](./template.env) contains default values for local setup. Adjust these values as needed.
 > For Django-specific variables see the [Django Settings Docs](https://docs.djangoproject.com/en/dev/ref/settings/).
 
 | Name | Type | Description |
-| :--- | :--: | ----------: |
+| :--- | :--: | :---------- |
 | FRONTEND_URL | URL | The frontend URL, used by the backend in [django settings](./conduit-backend/conduit/settings.py). |
 | FRONTEND_PORT | int | The frontend port, used by the backend in [django settings](./conduit-backend/conduit/settings.py). |
 | BACKEND_URL | URL | The backend API URL, used by the frontend in the [API Interceptor](./conduit-frontend/src/app/core/interceptors/api.interceptor.ts). |
@@ -106,6 +104,22 @@ The local development process is managed by [docker-compose.dev.yaml](./docker-c
 | DJANGO_SUPERUSER_PASSWORD | string | Password for the Django admin. |
 
 ---
+
+### Create Django Superuser without user input
+
+Start the application and run the following command:
+
+```bash
+docker-compose -f docker-compose.dev.yaml \
+exec conduit-backend \
+python manage.py create_django_superuser
+```
+
+> [!NOTE]
+> For the command to properly create a super user, following environments variables must be set:
+> - `DJANGO_SUPERUSER_EMAIL`
+> - `DJANGO_SUPERUSER_USERNAME`
+> - `DJANGO_SUPERUSER_PASSWORD`
 
 ## Deployment
 
