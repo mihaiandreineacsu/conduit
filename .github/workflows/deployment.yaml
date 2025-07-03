@@ -74,16 +74,20 @@ jobs:
           key: ${{ secrets.REMOTE_SSH_KEY }}
           script: |
             set -e
-            cd /tmp
+            TARGET_DIR="conduit"
+            mkdir -p "$TARGET_DIR"
+            mv /tmp/docker-compose.yaml /tmp/.env "$TARGET_DIR/"
+            cd "$TARGET_DIR"
+
             echo ${{ secrets.GHCR_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
             export FRONTEND_TAG=${{ github.ref_name }}
             export BACKEND_TAG=${{ github.ref_name }}
             export BACKEND_PORT=${{ secrets.BACKEND_PORT }}
+
             docker-compose pull
             docker-compose down
             docker-compose up -d
 
-
-
-
-
+            docker-compose exec conduit-backend python manage.py migrate
+            docker-compose exec conduit-backend python manage.py create_django_superuser
