@@ -1,46 +1,25 @@
-services:
+version: '3.8'
 
+services:
   conduit-frontend:
-    build:
-      context: .
-      dockerfile: ./frontend.Dockerfile
-      args:
-        API_URL: ${BACKEND_URL:-localhost}
-        API_PORT: ${BACKEND_PORT:-8000}
+    image: ghcr.io/mihaiandreineacsu/conduit-frontend:${FRONTEND_TAG:-latest}
     depends_on:
       - conduit-backend
-    restart: unless-stopped
+    restart: on-failure
     ports:
-      - "${FRONTEND_PORT:-8080}:80"
-    volumes:
-      - ./logs/frontend:/var/log/container_logs
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "3"
-    env_file:
-      - .env
+      - "${FRONTEND_PORT:-8282}:8080"
 
   conduit-backend:
-    build:
-      context: .
-      dockerfile: ./backend.Dockerfile
-    restart: unless-stopped
+    image: ghcr.io/mihaiandreineacsu/conduit-backend:${BACKEND_TAG:-latest}
+    restart: on-failure
     ports:
       - "${BACKEND_PORT:-8000}:8000"
-    volumes:
-      - db:/app/db
-      - ./logs/backend:/var/log/container_logs
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "3"
     env_file:
       - .env
-    entrypoint: ["/app/backend-entrypoint.sh"]
+    volumes:
+      - backend-data:/app/db
+      - static:/app/static
 
 volumes:
-  db:
-
+  backend-data:
+  static:

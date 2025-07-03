@@ -1,8 +1,9 @@
-#!/usr/bin/env bash
+#!/bin/sh
 set -e
 
-(
-    python manage.py makemigrations &&
-    python manage.py migrate &&
-    python manage.py runserver 0.0.0.0:8000
-) 2>&1 | tee -a /var/log/container_logs/container.log
+if [ "${DJANGO_DEBUG}" = "True" ]; then
+    exec python manage.py runserver 0.0.0.0:8000
+else
+    python manage.py collectstatic --no-input
+    exec gunicorn conduit.wsgi:application --bind 0.0.0.0:8000
+fi

@@ -1,5 +1,5 @@
 # Stage 1: Build the Angular app
-FROM node:20 AS build
+FROM bitnami/node:20 AS build
 WORKDIR /app
 COPY ./conduit-frontend/ .
 
@@ -15,7 +15,12 @@ RUN npm install && \
     npm run build
 
 # Production stage
-FROM nginx:alpine AS prod
-COPY --from=build /app/dist/angular-conduit /usr/share/nginx/html
-EXPOSE 80
-CMD ["sh", "-c", "nginx -g 'daemon off;' 2>&1 | tee -a /var/log/container_logs/container.log"]
+FROM bitnami/nginx:1.27.4 AS prod
+COPY --from=build /app/dist/angular-conduit /opt/bitnami/nginx/html
+COPY ./nginx.config /opt/bitnami/nginx/conf/server_blocks/nginx.config
+USER root
+COPY ./frontend-entrypoint.sh /app/frontend-entrypoint.sh
+RUN chmod +x /app/frontend-entrypoint.sh
+USER 1001
+EXPOSE 8080
+ENTRYPOINT [ "./frontend-entrypoint.sh" ]
