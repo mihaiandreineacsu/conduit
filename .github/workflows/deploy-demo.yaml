@@ -1,0 +1,19 @@
+name: "Deploy Demo"
+
+on:
+ workflow_dispatch:
+
+jobs:
+ deploy:
+   runs-on: unbuntu-latest
+
+   # Steps to deploy containerized application on VM
+   # 1. Repo checkout
+   # 2. Login to Github Container Registries
+   # 3. Build Project Docker Images and Push them to Github Container Registries
+   # 4. Create .env
+   # 5. Copy compose yaml end .env to vm
+   # 6. Log in to vm and pull images from  Github Container Registries (login to Github Container Registries)
+   # 7. Start Applicaiton on vm.
+
+ 
